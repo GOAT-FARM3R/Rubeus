@@ -28,7 +28,7 @@ jobs:
 
     - name: Build Solution
       run: |
-        msbuild.exe Rubeus.sln /p:platform="x64" /p:configuration="Release" 
+        msbuild.exe Rubeus.sln
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
