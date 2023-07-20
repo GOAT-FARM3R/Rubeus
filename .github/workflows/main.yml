@@ -1,0 +1,38 @@
+
+name: generic-build
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+     ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
+      
+    - name: Restore Packages
+      run: nuget restore Rubeus.sln
+
+    - name: Build Solution
+      run: |
+        msbuild.exe Rubeus.sln /p:platform="x64" /p:configuration="Release" 
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifact
+        path: bin\x64\Release\Rubeus.exe
+        retention-days: 1
